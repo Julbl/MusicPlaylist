@@ -1,0 +1,38 @@
+<!-- playlist_item.xml -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Название альбома -->
+
+    <!-- Поисковая строка -->
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Поиск по названию или исполнителю"/>
+
+    <!-- Список треков в виде RecyclerView, который занимает всё оставшееся пространство -->
+    <TextView
+        android:id="@+id/albumTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="Название альбома"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTracks"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <include layout="@layout/now_playing_panel" />
+</LinearLayout>
