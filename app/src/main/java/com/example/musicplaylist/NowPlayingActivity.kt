@@ -3,12 +3,17 @@ package com.example.musicplaylist
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.io.Serializable
+
+
 
 class NowPlayingActivity : AppCompatActivity() {
     private lateinit var playlist: List<MusicTrack>
@@ -18,8 +23,11 @@ class NowPlayingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_now_playing)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        Log.i("NowPlayingActivity", "onCreate: NowPlayingActivity created")
         playlist = intent.getSerializableExtra("playlist") as? List<MusicTrack> ?: emptyList()
+        currentTrackIndex = intent.getIntExtra("currentTrackIndex", 0)
+        //Log.i("NowPlayingActivity", "Received track: ${playlist[currentTrackIndex].title}")
+
 
         if (playlist.isEmpty()) {
             // Обработка ситуации, когда плейлист пуст
@@ -27,25 +35,33 @@ class NowPlayingActivity : AppCompatActivity() {
         } else {
             setupUI()
             playTrack(currentTrackIndex)
+            val currentTrack = playlist.getOrNull(currentTrackIndex)
+            if (currentTrack != null) {
+                Log.i("NowPlayingActivity", "Current Track: ${currentTrack.title}")
+            }
         }
-//        val playButton: Button = findViewById(R.id.playButton)
-//
-//        // Устанавливаем слушатель кликов для кнопки Play
-//        playButton.setOnClickListener {
-//            PanelManager.onPlayButtonClicked(this)
-//        }
-        PanelManager.setOnClickListener(View.OnClickListener {
-            // Здесь можно добавить код для перехода в NowPlayingActivity
-            // Например, открыть NowPlayingActivity
-            val intent = Intent(this, NowPlayingActivity::class.java)
-            startActivity(intent)
-        })
+        val track = intent.getSerializableExtra("track") as? MusicTrack
+        if (track != null) {
+            // Используйте информацию о треке для обновления интерфейса
+
+            // Пример обновления заголовка
+            val titleTextView: TextView = findViewById(R.id.nowPlayingTitleTextView)
+            titleTextView.text = track.title
+
+            // Пример обновления исполнителя
+            val artistTextView: TextView = findViewById(R.id.nowPlayingArtistTextView)
+            artistTextView.text = track.artist
+
+            // Пример обновления изображения обложки
+            val coverImageView: ImageView = findViewById(R.id.nowPlayingCoverImageView)
+            coverImageView.setImageResource(track.imageResourse)
+
+            // Другие обновления, если необходимо
+        }
     }
 
     private fun setupUI() {
         // Инициализация UI-элементов и обработчиков кнопок
-        // Например, кнопки play, pause, next, prev и другие элементы интерфейса
-        // Установка обработчиков событий для кнопок
 
         mediaPlayer = MediaPlayer()
 
@@ -78,6 +94,7 @@ class NowPlayingActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+        updateCoverImage(currentTrackIndex)
     }
 
     private fun playTrack(trackIndex: Int) {
@@ -129,6 +146,9 @@ class NowPlayingActivity : AppCompatActivity() {
     private fun setVolume(volume: Int) {
         val volumeFloat = volume / 100f
         mediaPlayer?.setVolume(volumeFloat, volumeFloat)
+    }
+    private fun updateCoverImage(trackIndex: Int) {
+        val coverImageView: ImageView = findViewById(R.id.nowPlayingCoverImageView)
     }
 
 }

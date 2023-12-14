@@ -40,18 +40,16 @@
         <activity
             android:name=".NowPlayingActivity"
             android:label="Track"
-            android:parentActivityName=".PlaylistActivity">
+            android:parentActivityName=".PlaylistActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlaylistActivity" />
         </activity>
-        <service
-            android:name=".MediaPlaybackService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>

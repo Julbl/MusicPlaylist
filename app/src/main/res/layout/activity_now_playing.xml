@@ -8,13 +8,27 @@
     tools:context=".NowPlayingActivity">
 
     <!-- Изображение обложки текущего трека в центре экрана -->
+
     <ImageView
         android:id="@+id/nowPlayingCoverImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="317dp"
+        android:layout_height="566dp"
         android:scaleType="centerCrop" />
 
+    <TextView
+        android:id="@+id/nowPlayingTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Now Playing Title" />
+
     <!-- Панель управления воспроизведением и переключения треков -->
+
+    <TextView
+        android:id="@+id/nowPlayingArtistTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Now Playing Title" />
+
     <LinearLayout
         android:id="@+id/controlPanel"
         android:layout_width="match_parent"

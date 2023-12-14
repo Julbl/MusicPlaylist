@@ -14,9 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
-
-class TrackAdapter(private val context: Context, private val allTracks: List<MusicTrack>) :
-    RecyclerView.Adapter<TrackAdapter.TrackViewHolder>(), Filterable {
+class TrackAdapter(private val context: Context, private val allTracks: List<MusicTrack>, private val onTrackClickListener:
+    (MusicTrack) -> Unit) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>(), Filterable {
     private var filteredTracks: List<MusicTrack> = allTracks
     private val mediaPlayerManager = MediaPlayerManager.getInstance()
 
@@ -31,8 +30,12 @@ class TrackAdapter(private val context: Context, private val allTracks: List<Mus
         holder.bind(track)
         holder.itemView.setOnClickListener {
             mediaPlayerManager.playTrack(context, track)
-            PanelManager.updateTrack(track)
-            openNowPlayingActivity(track)
+            mediaPlayerManager.updateTrack(track)
+            onTrackClickListener.invoke(track)
+            val intent = Intent(context, NowPlayingActivity::class.java)
+            //intent.putExtra("track", selectedTrack)
+            context.startActivity(intent)
+            //openNowPlayingActivity(track)
         }
     }
 
@@ -71,12 +74,12 @@ class TrackAdapter(private val context: Context, private val allTracks: List<Mus
     }
 
 
-    private fun openNowPlayingActivity(track: MusicTrack) {
+    /*private fun openNowPlayingActivity(track: MusicTrack) {
         Log.i("TrackAdapter", "Opening NowPlayingActivity for track: ${track.title}")
-        val intent = Intent(context, NowPlayingActivity::class.java)
+        val intent = Intent(context, com.example.musicplaylist.NowPlayingActivity::class.java)
         intent.putExtra("track", track)
         context.startActivity(intent)
-    }
+    }*/
     inner class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleTextView: TextView = itemView.findViewById(R.id.trackTitleTextView)
         private val artistTextView: TextView = itemView.findViewById(R.id.trackArtistTextView)
@@ -88,6 +91,17 @@ class TrackAdapter(private val context: Context, private val allTracks: List<Mus
             albumTextView.text = track.album
             albumImageView.setImageResource(track.imageResourse)
             // Другие детали, если есть
+        }
+
+        init {
+            // Обработчик клика устанавливает активность для выбранного трека
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val clickedTrack = allTracks[position]
+                    onTrackClickListener.invoke(clickedTrack)
+                }
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ import android.media.MediaPlayer
 import android.widget.Toast
 
 class MediaPlayerManager private constructor(){
+    private var track: MusicTrack? = null
+    private var listener: ((MusicTrack?) -> Unit)? = null
     private var mediaPlayer: MediaPlayer? = null
     private var currentTrack: MusicTrack? = null
 
@@ -56,7 +58,8 @@ class MediaPlayerManager private constructor(){
             currentTrack = track
 
             // Обновляем интерфейс
-            PanelManager.updateTrack(track)
+            updateTrack(track)
+
         } else {
             // Ресурс не найден, выводим сообщение об ошибке или что-то подобное
             Toast.makeText(context, "Resource not found for track: ${track.audioFileName}", Toast.LENGTH_SHORT).show()
@@ -78,6 +81,12 @@ class MediaPlayerManager private constructor(){
     fun getCurrentTrack(): MusicTrack? {
         return currentTrack
     }
+
+    fun updateTrack(track: MusicTrack) {
+        this.track = track
+        listener?.invoke(track)
+    }
+
 
     // Другие методы управления воспроизведением, если нужно
 }

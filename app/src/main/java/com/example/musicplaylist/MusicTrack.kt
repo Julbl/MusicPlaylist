@@ -14,6 +14,7 @@ data class MusicTrack(
 fun getSampleTracksForPlaylistGoodMood(): List<MusicTrack> {
     return listOf(
         MusicTrack("Asphalt 8", "MACAN", "Для хорошего настроения",R.drawable.asphalt8, "asphalt"),
+        MusicTrack("LastChristmas", "WHAM!", "Для хорошего настроения",R.drawable.wham_last_christmas, "last_christmas")
         // Добавьте другие треки, если необходимо
     )
 }
